@@ -107,8 +107,12 @@ async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
 # Function to run the bot's polling loop
 def run_bot_polling(app):
-    # This loop needs to be run in a way that asyncio can manage it
-    asyncio.run(app.run_polling())
+    # Create a new event loop for this background thread
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+
+    # Run the bot's polling function within this new loop
+    loop.run_until_complete(app.run_polling())
 
 # The main Flask app for UptimeRobot to ping
 app = Flask(__name__)
